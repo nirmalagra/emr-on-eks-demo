@@ -1,0 +1,33 @@
+{
+  "name": "wordcount",
+  "virtualClusterId": "<VIRTUAL_CLUSTER_ID>",
+  "executionRoleArn": "<JOB_EXECUTION_IAM_ROLE>",
+  "releaseLabel": "emr-6.3.0-20210429",
+  "jobDriver": {
+    "sparkSubmitJobDriver": {
+      "entryPoint": "s3://sample-bucket/emr-on-eks-demo/word-count/wordcount.py",
+      "entryPointArguments" : [
+        "s3://sample-bucket/emr-on-eks-demo/word-count/sample_data.txt"
+      ],
+      "sparkSubmitParameters": "  --deploy-mode cluster   --conf spark.driver.memoryOverhead=512m --conf spark.executor.memory=1g --conf spark.driver.memory=1g --conf spark.executor.memoryOverhead=1g "    }
+  },
+  "configurationOverrides": {
+    "applicationConfiguration": [
+      {
+        "classification": "spark-defaults",
+        "properties": {
+          "spark.dynamicAllocation.enabled":"false"
+        }
+      }
+    ],
+    "monitoringConfiguration": {
+      "cloudWatchMonitoringConfiguration": {
+        "logGroupName": "s3://sample-bucket/emr-on-eks-demo",
+        "logStreamNamePrefix": "wordcount"
+      },
+      "s3MonitoringConfiguration": {
+        "logUri": "s3://sample-bucket/emr-on-eks-demo/logs/"
+      }
+    }
+  }
+}
